@@ -1,0 +1,89 @@
+const express = require('express');
+const { PrismaClient } = require('@prisma/client'); // Primeira novidade, importa o prisma
+ 
+const app = express();
+const port = 3000;
+app.use(express.json());
+ 
+const prisma = new PrismaClient(); // 2. Instancia o nosso "Cliente Prisma"
+ 
+// O Cardápio continua aqui, Por enquanto ele é regra, não dado salvo
+const cardapio = [
+  { item: 'Macarronada', preco: 35.00 },
+  { item: 'Salada Ceasar', preco: 28.00 },
+  { item: 'Suco de Laranja', preco: 10.00 }
+];
+ 
+// --- ROTAS (Agora com ASYNC / AWAIT) ---
+// Como ir ao banco na nuvem demora um pouco, nosso "java" vai ter que esperar (await) 
+ 
+ 
+// GET - Buscar do Banco
+app.get('/pedidos', async (req, res) => {
+  const todosOsPedidos = await prisma.pedido.findMany(); // Prisma, busque todos!
+  res.json(todosOsPedidos);
+});
+ 
+// POST - Salvar no Banco
+app.post('/pedidos', async (req, res) => {
+  const { prato } = req.body; 
+ 
+  // Validações que já fizemos continuam aqui
+  if (!prato || prato.trim() === "") {
+    return res.status(400).json({ erro: "O nome do prato é obrigatório!" });
+  }
+ 
+  const pratoExisteNoMenu = cardapio.some(produto => 
+    produto.item.toLowerCase() === prato.toLowerCase()
+  );
+ 
+  if (!pratoExisteNoMenu) {
+    return res.status(400).json({ erro: `A cozinha não possui '${prato}' no cardápio.` });
+  }
+ 
+  // Aqui a nova mágica acontece
+  const novoPedido = await prisma.pedido.create({
+    data: {
+      prato: prato
+      // Não passamos o ID nem o status. O Prisma cuida disso pra nós
+    }
+  });
+ 
+  res.status(201).json(novoPedido);
+});
+ 
+// GET /menu continua igual, ele ainda esta em memória
+app.get('/menu', (req, res) => {
+  res.json(cardapio);
+});
+
+
+//gpt daqui pra baixo
+// PUT /pedidos/:id - Atualizar status do pedido
+app.put('/pedidos/:id', async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  // validação básica
+  if (!status || status.trim() === "") {
+    return res.status(400).json({ erro: "O status é obrigatório!" });
+  }
+
+  try {
+    const pedidoAtualizado = await prisma.pedido.update({
+      where: {
+        id: id
+      },
+      data: {
+        status: status
+      }
+    });
+
+    res.json(pedidoAtualizado);
+
+  } catch (error) {
+    res.status(404).json({ erro: "Pedido não encontrado!" });
+  }
+});
+ 
+app.listen(port, () => console.log(`Servidor rodando na porta ${port}`));
