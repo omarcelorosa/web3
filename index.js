@@ -57,10 +57,11 @@ app.get('/menu', (req, res) => {
   res.json(cardapio);
 });
 
-app.get('/pedidos/status/:status', async (req, res) => {
+//ordenar por status
+app.get('/pedidos/status/:status', async (req, res) => { //:status é um parâmetro dinâmico
   const { status } = req.params;
 
-  const pedidos = await prisma.pedido.findMany({
+  const pedidos = await prisma.pedido.findMany({ //possível por conta da async (req, res) (função assíncrona), e organiza o código de forma mais limpa
     where: {
       status: status
     }
@@ -74,9 +75,41 @@ app.get('/pedidos/:id', async (req, res) => {
 
   const pedido = await prisma.pedido.findUnique({
     where: {
+      id: (id)
+    }
+  })
+  res.json(pedido);
+})
+
+app.delete('/pedidos/:id', async (req, res) => {
+  const {id} = req.params;
+
+  await prisma.pedido.delete({
+    where: {
       id: parseInt(id)
     }
   })
 })
- 
+
+app.get('/pedidos/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const pedido = await prisma.pedido.findUnique({
+      where: {
+        id: id
+      }
+    });
+
+    if (!pedido) {
+      return res.status(404).json({ erro: "Pedido não encontrado" });
+    }
+
+    res.json(pedido);
+
+  } catch (error) { // se der eero no try vem pra cá
+    res.status(400).json({ erro: "ID inválido" });
+  }
+});
+
 app.listen(port, () => console.log(`Servidor rodando na porta ${port}`));
