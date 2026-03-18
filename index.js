@@ -57,33 +57,26 @@ app.get('/menu', (req, res) => {
   res.json(cardapio);
 });
 
+app.get('/pedidos/status/:status', async (req, res) => {
+  const { status } = req.params;
 
-//gpt daqui pra baixo
-// PUT /pedidos/:id - Atualizar status do pedido
-app.put('/pedidos/:id', async (req, res) => {
-  const { id } = req.params;
-  const { status } = req.body;
+  const pedidos = await prisma.pedido.findMany({
+    where: {
+      status: status
+    }
+  });
 
-  // validação básica
-  if (!status || status.trim() === "") {
-    return res.status(400).json({ erro: "O status é obrigatório!" });
-  }
-
-  try {
-    const pedidoAtualizado = await prisma.pedido.update({
-      where: {
-        id: id
-      },
-      data: {
-        status: status
-      }
-    });
-
-    res.json(pedidoAtualizado);
-
-  } catch (error) {
-    res.status(404).json({ erro: "Pedido não encontrado!" });
-  }
+  res.json(pedidos);
 });
+
+app.get('/pedidos/:id', async (req, res) => {
+  const {id} = req.params;
+
+  const pedido = await prisma.pedido.findUnique({
+    where: {
+      id: parseInt(id)
+    }
+  })
+})
  
 app.listen(port, () => console.log(`Servidor rodando na porta ${port}`));
