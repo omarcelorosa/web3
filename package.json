@@ -5,6 +5,8 @@
   "dependencies": {
     "@prisma/client": "^6.19.2",
     "express": "^5.2.1",
-    "mongodb": "^7.1.0"
+    "mongodb": "^7.1.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   }
 }
