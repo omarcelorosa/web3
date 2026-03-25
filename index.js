@@ -3,10 +3,12 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json'); // Indicar o nome do arquivo
 
 const express = require('express');
+const cors = require('cors'); // Importa o CORS
 const { PrismaClient } = require('@prisma/client'); // Primeira novidade, importa o prisma
 
 const app = express();
-const port = 3000;
+const port = 3001;
+app.use(cors()); // Habilita o CORS para todas as rotas
 app.use(express.json());
 
 const prisma = new PrismaClient(); // 2. Instancia o nosso "Cliente Prisma"
