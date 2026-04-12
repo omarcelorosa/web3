@@ -1,8 +1,7 @@
-import Link from 'next/link';
 // Função principal, assincrona pois precisa receber o dado da nossa api
 export default async function Home() {
   // Faz a requisição para a nossa API do Express!
-  const resposta = await fetch('http://localhost:3000/menu', { // Busca os dados da nossa API, no caso rota menu
+  const resposta = await fetch('http://localhost:3001/menu', { // Busca os dados da nossa API, no caso rota menu
     cache: 'no-store' // Sem cache, pega os dados diretamente da api
   });
   //Variavel cardapio armazena o resultado da nossa requisição
@@ -22,9 +21,6 @@ export default async function Home() {
           </li>
         ))}
       </ul>
-      <Link href="/pedidos"> {/*navegação entre páginas, necessita de (import Link from 'next/link';) */}
-        <button className="botao">Ver Pedidos</button>
-      </Link>
     </main>
   );
 }

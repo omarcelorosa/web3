@@ -7,7 +7,8 @@ const cors = require('cors'); // Importa o CORS
 const { PrismaClient } = require('@prisma/client'); // Primeira novidade, importa o prisma
 
 const app = express();
-const port = 3001;
+const port = 3000
+;
 app.use(cors()); // Habilita o CORS para todas as rotas
 app.use(express.json());
 
