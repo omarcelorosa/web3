@@ -36,3 +36,8 @@ body {
   background-color: aqua;
   color: black;
 }
+.inPrato{
+  border: 2px solid aqua;
+  border-radius: 5px; 
+  display: inline-block;
+}

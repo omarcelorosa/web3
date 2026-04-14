@@ -36,15 +36,9 @@ export default function FormularioPedido() {
     <div>
       <h2>Fazer Pedido</h2>
 
-      <form onSubmit={enviarPedido}>
-        <input
-          type="text"
-          placeholder="Digite o prato"
-          value={prato}
-          onChange={(e) => setPrato(e.target.value)}
-        />
-
-        <button type="submit">Enviar</button>
+      <form className="inPrato" onSubmit={enviarPedido}>
+        <input type="text" placeholder="Digite o prato" value={prato} onChange={(e) => setPrato(e.target.value)}/>
+        <button className="botao" type="submit">Confirmar</button>
       </form>
 
       {mensagem && <p>{mensagem}</p>}
