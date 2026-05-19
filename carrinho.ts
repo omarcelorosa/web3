@@ -23,12 +23,15 @@ const carrinho: Produto[] = [
     nome: "Suco de Laranja",
     preco: 10.00,
     emEstoque: false
+  },
+  {
+    id: 4,
+    nome: "Suco de Uva",
+    preco: 15.00,
+    emEstoque: true
   }
 ];
 
-// ========================================
-// FUNÇÃO: calcular total do carrinho
-// ========================================
 function calcularTotal(carrinho: Produto[]): number {
   let total = 0;
 
@@ -39,19 +42,14 @@ function calcularTotal(carrinho: Produto[]): number {
   return total;
 }
 
-// ========================================
-// FUNÇÃO: aplicar desconto em porcentagem
-// ========================================
+// aplicar desconto em porcentagem
+
   //const porcentagem = 25
 function aplicarDesconto(total: number, porcentagem: number): number {
   const desconto = total * (porcentagem / 100);
 
   return total - desconto;
 }
-
-// ========================================
-// USANDO AS FUNÇÕES
-// ========================================
 
 const totalCarrinho = calcularTotal(carrinho);
 
